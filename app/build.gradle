@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 apply plugin: 'com.github.ben-manes.versions'
 
-def packageName = "moe.linux.boilerplate"
+def packageName = "moe.linux.readcard.tdu"
 
 android {
     compileSdkVersion 25
