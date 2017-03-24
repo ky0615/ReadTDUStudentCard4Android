@@ -1,8 +1,8 @@
 package moe.linux.boilerplate.api.github
 
 import com.google.gson.annotations.SerializedName
-import nz.bradcampbell.paperparcel.PaperParcel
-import nz.bradcampbell.paperparcel.PaperParcelable
+import paperparcel.PaperParcel
+import paperparcel.PaperParcelable
 import java.util.*
 
 @PaperParcel
@@ -19,7 +19,7 @@ data class CommitsResponse(
     val committer: User
 ) : PaperParcelable {
     companion object {
-        @JvmField val CREATOR = PaperParcelable.Creator(CommitsResponse::class.java)
+        @JvmField val CREATOR = PaperParcelCommitsResponse.CREATOR
     }
 }
 
@@ -37,7 +37,7 @@ data class Commit(
     val commentCount: Int
 ) : PaperParcelable {
     companion object {
-        @JvmField val CREATOR = PaperParcelable.Creator(Commit::class.java)
+        @JvmField val CREATOR = PaperParcelCommit.CREATOR
     }
 }
 
@@ -50,10 +50,11 @@ data class CommitUser(
     val date: Date
 ) : PaperParcelable {
     companion object {
-        @JvmField val CREATOR = PaperParcelable.Creator(CommitUser::class.java)
+        @JvmField val CREATOR = PaperParcelCommitUser.CREATOR
     }
 }
 
+@PaperParcel
 data class User(
     val login: String,
 
@@ -62,6 +63,6 @@ data class User(
     val avatar_url: String
 ) : PaperParcelable {
     companion object {
-        @JvmField val CREATOR = PaperParcelable.Creator(User::class.java)
+        @JvmField val CREATOR = PaperParcelUser.CREATOR
     }
 }
