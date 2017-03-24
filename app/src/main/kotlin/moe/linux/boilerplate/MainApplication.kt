@@ -1,6 +1,7 @@
 package moe.linux.boilerplate
 
 import android.app.Application
+import android.support.multidex.MultiDex
 import dagger.Lazy
 import moe.linux.boilerplate.di.AppComponent
 import moe.linux.boilerplate.di.AppModule
@@ -21,6 +22,7 @@ class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        MultiDex.install(this)
         component.injectTo(this)
 
         if (BuildConfig.DEBUG)
