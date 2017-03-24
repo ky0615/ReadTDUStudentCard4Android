@@ -138,9 +138,9 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
 
     // Paperparcel
-    compile 'com.github.grandstaish.paperparcel:paperparcel:1.0.1'
-    compile 'com.github.grandstaish.paperparcel:paperparcel-kotlin:1.0.1'
-    kapt 'com.github.grandstaish.paperparcel:compiler:1.0.1'
+    compile 'nz.bradcampbell:paperparcel:2.0.0'
+    compile 'nz.bradcampbell:paperparcel-kotlin:2.0.0' // Optional
+    kapt 'nz.bradcampbell:paperparcel-compiler:2.0.0'
 
     // Misc
     compile 'com.jakewharton.timber:timber:4.3.1'

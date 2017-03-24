@@ -1,6 +1,12 @@
 package moe.linux.boilerplate.view.activity
 
+import android.app.PendingIntent
+import android.content.Intent
+import android.content.IntentFilter
 import android.databinding.DataBindingUtil
+import android.nfc.NfcAdapter
+import android.nfc.Tag
+import android.nfc.tech.NfcF
 import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
@@ -8,8 +14,10 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
+import android.widget.Toast
 import io.reactivex.Observable
 import moe.linux.boilerplate.R
+import moe.linux.boilerplate.api.NfcReadUtil
 import moe.linux.boilerplate.api.github.GithubApiClient
 import moe.linux.boilerplate.api.qiita.QiitaApiClient
 import moe.linux.boilerplate.databinding.ActivityMainBinding
@@ -18,11 +26,14 @@ import moe.linux.boilerplate.view.fragment.FrontFragment
 import moe.linux.boilerplate.view.fragment.GithubListFragment
 import moe.linux.boilerplate.view.fragment.QiitaListFragment
 import timber.log.Timber
+import java.lang.Exception
 import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
 
     lateinit var binding: ActivityMainBinding
+
+    val nfcReadUtil = NfcReadUtil()
 
     @Inject
     lateinit var client: GithubApiClient
@@ -37,6 +48,17 @@ class MainActivity : BaseActivity() {
     val qiitaListFragment: QiitaListFragment by lazyFragment(QiitaListFragment.TAG, { QiitaListFragment.newInstance() })
 
     val githubListFragment: GithubListFragment by lazyFragment(GithubListFragment.TAG, { GithubListFragment.newInstance() })
+
+    val nfcAdapter: NfcAdapter by lazy { NfcAdapter.getDefaultAdapter(applicationContext) }
+
+    val pendingIntent by lazy { PendingIntent.getActivity(this, 0, Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0) }
+
+    val intentFilter by lazy {
+        arrayOf(
+            IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED)
+                .apply { addDataType("text/plain") }
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,6 +109,29 @@ class MainActivity : BaseActivity() {
     private fun initFragment(savedInstanceState: Bundle?) {
         if (savedInstanceState == null)
             switchFragment(frontFragment, FrontFragment.TAG)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        nfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFilter, arrayOf(arrayOf(NfcF::class.java.name)))
+    }
+
+    override fun onPause() {
+        super.onPause()
+        nfcAdapter.disableForegroundDispatch(this)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        val tag: Tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG) ?: return
+        Timber.d("recieve the card: ${tag.id}")
+        try {
+            val readTag = nfcReadUtil.readTag(tag)
+            Timber.d(readTag.toString())
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "読み取りに失敗しました。\n${e.message}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onBackPressed() {
