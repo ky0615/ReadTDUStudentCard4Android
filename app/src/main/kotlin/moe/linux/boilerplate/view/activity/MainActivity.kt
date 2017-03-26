@@ -113,11 +113,13 @@ class MainActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
+        Timber.d("start nfc scanning")
         nfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFilter, arrayOf(arrayOf(NfcF::class.java.name)))
     }
 
     override fun onPause() {
         super.onPause()
+        Timber.d("stop nfc scanning")
         nfcAdapter.disableForegroundDispatch(this)
     }
 
@@ -128,6 +130,7 @@ class MainActivity : BaseActivity() {
         try {
             val readTag = nfcReadUtil.readTag(tag)
             Timber.d(readTag.toString())
+            Toast.makeText(this, "name: ${readTag.name}\nnumber: ${readTag.number}", Toast.LENGTH_LONG).show()
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(this, "読み取りに失敗しました。\n${e.message}", Toast.LENGTH_SHORT).show()

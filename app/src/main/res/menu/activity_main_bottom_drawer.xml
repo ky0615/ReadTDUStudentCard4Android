@@ -6,7 +6,7 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/navHome"
-            android:icon="@drawable/ic_menu_home"
+            android:icon="@drawable/ic_menu_share"
             android:title="@string/menu_home" />
         <item
             android:id="@+id/navGithub"

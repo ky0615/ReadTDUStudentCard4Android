@@ -2,6 +2,7 @@ package moe.linux.boilerplate.api
 
 import android.nfc.Tag
 import android.nfc.tech.NfcF
+import android.util.Base64
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.util.*
@@ -81,6 +82,11 @@ class NfcReadUtil {
             val offset = 13 + it * 16
             IntRange(0, 15).map { res[offset + it] }.toByteArray()
         }
+
+        val encoded: List<ByteArray> = parse.map { Base64.encode(it, Base64.DEFAULT) }
+        encoded.forEach { Timber.d(it.toString()) }
+        Timber.d("---")
+        encoded.forEach { Timber.d(String(it)) }
 
         if (parse.size < 2)
             throw RuntimeException("block size is need upper 2")
