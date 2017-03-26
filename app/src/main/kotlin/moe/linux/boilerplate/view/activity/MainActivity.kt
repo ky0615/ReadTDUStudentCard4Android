@@ -76,6 +76,7 @@ class MainActivity : BaseActivity() {
                 switchFragment(this, this.TAG)
             }
         })
+
     }
 
     private fun initView() {

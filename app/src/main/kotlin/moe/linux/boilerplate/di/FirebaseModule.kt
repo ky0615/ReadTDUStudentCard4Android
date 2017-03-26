@@ -11,5 +11,5 @@ class FirebaseModule {
     fun provideFirebaseDatabase() = FirebaseDatabase.getInstance()
 
     @Provides @Singleton
-    fun provideDatabaseReference(db: FirebaseDatabase) = db.getReference("board")
+    fun provideDatabaseReference(db: FirebaseDatabase) = db.getReference("student_card")
 }

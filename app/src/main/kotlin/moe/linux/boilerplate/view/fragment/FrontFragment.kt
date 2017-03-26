@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.firebase.database.DatabaseReference
 import moe.linux.boilerplate.databinding.FragmentFrontBinding
 import moe.linux.boilerplate.view.activity.MainActivity
 import moe.linux.boilerplate.viewModel.BoardViewModel
@@ -14,9 +13,6 @@ class FrontFragment : BaseFragment() {
     override val TAG: String = FrontFragment.TAG
 
     override fun getPage(): MainActivity.Page = MainActivity.Page.FRONT
-
-    @Inject
-    lateinit var db: DatabaseReference
 
     @Inject
     lateinit var viewModel: BoardViewModel

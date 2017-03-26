@@ -83,17 +83,13 @@ class NfcReadUtil {
             IntRange(0, 15).map { res[offset + it] }.toByteArray()
         }
 
-        val encoded: List<ByteArray> = parse.map { Base64.encode(it, Base64.DEFAULT) }
-        encoded.forEach { Timber.d(it.toString()) }
-        Timber.d("---")
-        encoded.forEach { Timber.d(String(it)) }
-
         if (parse.size < 2)
             throw RuntimeException("block size is need upper 2")
 
         return StudentCard(
             number = String(parse[0]).substring(2, 9),
-            name = String(parse[1].filter { it != 0x00.toByte() }.toByteArray())
+            name = String(parse[1].filter { it != 0x00.toByte() }.toByteArray()),
+            raw = parse.map { Base64.encode(it, Base64.DEFAULT) }.map { String(it) }
         )
     }
 }
