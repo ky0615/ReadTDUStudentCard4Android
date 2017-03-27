@@ -9,5 +9,10 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_qiita">Qiita</string>
-    <string name="menu_github">Github</string>
+    <string name="menu_detail">Detail</string>
+
+
+    <string name="detail_name">Name</string>
+    <string name="detail_number">Number</string>
+    <string name="detail_save">Save</string>
 </resources>

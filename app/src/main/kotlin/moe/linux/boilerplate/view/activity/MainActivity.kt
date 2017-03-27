@@ -22,8 +22,8 @@ import moe.linux.boilerplate.api.github.GithubApiClient
 import moe.linux.boilerplate.api.qiita.QiitaApiClient
 import moe.linux.boilerplate.databinding.ActivityMainBinding
 import moe.linux.boilerplate.view.fragment.BaseFragment
+import moe.linux.boilerplate.view.fragment.DetailFragment
 import moe.linux.boilerplate.view.fragment.FrontFragment
-import moe.linux.boilerplate.view.fragment.GithubListFragment
 import moe.linux.boilerplate.view.fragment.QiitaListFragment
 import timber.log.Timber
 import java.lang.Exception
@@ -47,7 +47,7 @@ class MainActivity : BaseActivity() {
 
     val qiitaListFragment: QiitaListFragment by lazyFragment(QiitaListFragment.TAG, { QiitaListFragment.newInstance() })
 
-    val githubListFragment: GithubListFragment by lazyFragment(GithubListFragment.TAG, { GithubListFragment.newInstance() })
+    val detailFragment: DetailFragment by lazyFragment(DetailFragment.TAG, { DetailFragment.newInstance() })
 
     val nfcAdapter: NfcAdapter by lazy { NfcAdapter.getDefaultAdapter(applicationContext) }
 
@@ -70,7 +70,7 @@ class MainActivity : BaseActivity() {
         onStateChange.subscribe({
             when (it) {
                 MainActivity.Page.FRONT -> frontFragment
-                MainActivity.Page.Github -> githubListFragment
+                MainActivity.Page.Detail -> detailFragment
                 MainActivity.Page.Qiita -> qiitaListFragment
             }.apply {
                 switchFragment(this, this.TAG)
@@ -131,7 +131,9 @@ class MainActivity : BaseActivity() {
         try {
             val readTag = nfcReadUtil.readTag(tag)
             Timber.d(readTag.toString())
-            Toast.makeText(this, "name: ${readTag.name}\nnumber: ${readTag.number}", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "name : ${readTag.name}\nnumber: ${readTag.number}", Toast.LENGTH_LONG).show()
+            switchFragment(detailFragment, DetailFragment.TAG)
+            detailFragment.viewModel.studentCard = readTag
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(this, "読み取りに失敗しました。\n${e.message}", Toast.LENGTH_SHORT).show()
@@ -196,7 +198,7 @@ class MainActivity : BaseActivity() {
 
     enum class Page(@IdRes val id: Int, @StringRes val title: Int) {
         FRONT(R.id.navHome, R.string.app_name), // other page
-        Github(R.id.navGithub, R.string.menu_github),
+        Detail(R.id.navDetail, R.string.menu_detail),
         Qiita(R.id.navQiita, R.string.menu_qiita),
         ;
 

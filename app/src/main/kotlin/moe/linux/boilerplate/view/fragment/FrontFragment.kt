@@ -1,12 +1,14 @@
 package moe.linux.boilerplate.view.fragment
 
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import moe.linux.boilerplate.databinding.FragmentFrontBinding
 import moe.linux.boilerplate.view.activity.MainActivity
 import moe.linux.boilerplate.viewModel.BoardViewModel
+import moe.linux.boilerplate.viewModel.StudentCardListAdapter
 import javax.inject.Inject
 
 class FrontFragment : BaseFragment() {
@@ -34,7 +36,11 @@ class FrontFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentFrontBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
+            .apply {
+                viewModel = this@FrontFragment.viewModel
+                list.layoutManager = LinearLayoutManager(context)
+                list.adapter = StudentCardListAdapter(context, viewModel.userList)
+            }
         return binding.root
     }
 
