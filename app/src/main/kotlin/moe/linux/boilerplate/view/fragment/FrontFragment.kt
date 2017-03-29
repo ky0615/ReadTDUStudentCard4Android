@@ -32,6 +32,7 @@ class FrontFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fragmentComponent.injectTo(this)
+        viewModel.start()
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -47,6 +48,10 @@ class FrontFragment : BaseFragment() {
     override fun onStart() {
         super.onStart()
         viewModel.binding = binding
-        viewModel.start()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.destroy()
     }
 }

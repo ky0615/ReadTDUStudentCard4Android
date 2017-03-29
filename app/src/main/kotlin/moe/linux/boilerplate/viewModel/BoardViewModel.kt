@@ -20,30 +20,38 @@ import moe.linux.boilerplate.util.view.ViewModel
 import timber.log.Timber
 import javax.inject.Inject
 
-class BoardViewModel @Inject constructor(db: DatabaseReference, val navigator: Navigator) : BaseObservable() {
+class BoardViewModel @Inject constructor(db: DatabaseReference, val navigator: Navigator) : BaseObservable(), ViewModel {
+
     val userList = ObservableArrayList<StudentCardViewModel>()
 
     val userDb = db.child("user")!!
 
     lateinit var binding: FragmentFrontBinding
 
-    fun start() {
-        userDb.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(p0: DataSnapshot?) {
-                p0?.children?.forEach {
-                    userList.add(it.getValue(StudentCard::class.java).convertToViewModel())
-                    Timber.d("list: ${it.value}")
-                }
-                Timber.d("add message : ${p0?.value.toString()}")
+    val userDbEventListener = object : ValueEventListener {
+        override fun onDataChange(p0: DataSnapshot?) {
+            p0?.children?.forEach {
+                userList.add(it.getValue(StudentCard::class.java).convertToViewModel())
+                Timber.d("list: ${it.value}")
             }
+            Timber.d("add message : ${p0?.value.toString()}")
+        }
 
-            override fun onCancelled(p0: DatabaseError?) {
-                Timber.e("error: ${p0?.message}")
-            }
-        })
+        override fun onCancelled(p0: DatabaseError?) {
+            Timber.e("error: ${p0?.message}")
+        }
+    }
+
+    fun start() {
+        userDb.addValueEventListener(userDbEventListener)
     }
 
     fun StudentCard.convertToViewModel() = StudentCardViewModel(navigator, this)
+
+    override fun destroy() {
+        userDb.removeEventListener(userDbEventListener)
+        userList.clear()
+    }
 }
 
 class StudentCardViewModel(val navigator: Navigator, val studentCard: StudentCard) : BaseObservable(), ViewModel {
