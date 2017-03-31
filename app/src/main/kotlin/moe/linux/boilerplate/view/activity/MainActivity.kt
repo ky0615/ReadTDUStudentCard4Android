@@ -8,6 +8,7 @@ import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.nfc.tech.NfcF
 import android.os.Bundle
+import android.os.Vibrator
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
@@ -40,6 +41,9 @@ class MainActivity : BaseActivity() {
 
     @Inject
     lateinit var qiitaClient: QiitaApiClient
+
+    @Inject
+    lateinit var vibrator: Vibrator
 
     lateinit var onStateChange: Observable<Page>
 
@@ -132,6 +136,7 @@ class MainActivity : BaseActivity() {
             val readTag = nfcReadUtil.readTag(tag)
             Timber.d(readTag.toString())
             Toast.makeText(this, "name : ${readTag.name}\nnumber: ${readTag.number}", Toast.LENGTH_LONG).show()
+            vibrator.vibrate(250)
             switchFragment(detailFragment, DetailFragment.TAG)
             detailFragment.viewModel.studentCard = readTag
         } catch (e: Exception) {
