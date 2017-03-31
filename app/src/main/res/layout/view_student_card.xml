@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -13,14 +16,38 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.studentCard.name}" />
+            android:foreground="?android:attr/selectableItemBackground"
+            android:onClick="@{viewModel::onClick}"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="@dimen/indent_0_25"
+            app:cardElevation="@dimen/indent_1"
+            app:cardUseCompatPadding="true">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{viewModel.studentCard.number}" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/indent_2"
+                android:paddingLeft="@dimen/indent_4"
+                android:paddingRight="@dimen/indent_4"
+                android:paddingTop="@dimen/indent_2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.studentCard.name}"
+                    android:textSize="@dimen/text_size_4"
+                    tools:text="11EJ025" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.studentCard.number}"
+                    tools:text="DAREKANO NAME" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
     </LinearLayout>
 </layout>
