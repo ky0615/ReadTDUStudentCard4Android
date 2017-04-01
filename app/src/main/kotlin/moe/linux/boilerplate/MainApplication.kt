@@ -3,7 +3,10 @@ package moe.linux.boilerplate
 import android.app.Application
 import android.content.Context
 import android.support.multidex.MultiDex
+import com.crashlytics.android.Crashlytics
+import com.crashlytics.android.answers.Answers
 import dagger.Lazy
+import io.fabric.sdk.android.Fabric
 import moe.linux.boilerplate.di.AppComponent
 import moe.linux.boilerplate.di.AppModule
 import moe.linux.boilerplate.di.DaggerAppComponent
@@ -29,6 +32,8 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         component.injectTo(this)
+
+        Fabric.with(this, Crashlytics(), Answers())
 
         if (BuildConfig.DEBUG)
             Timber.plant(debugTree.get())
