@@ -4,10 +4,12 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.content.IntentFilter
 import android.databinding.DataBindingUtil
+import android.media.AudioManager
+import android.media.SoundPool
 import android.nfc.NfcAdapter
-import android.nfc.Tag
 import android.nfc.tech.NfcF
 import android.os.Bundle
+import android.os.Handler
 import android.os.Vibrator
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
@@ -53,7 +55,34 @@ class MainActivity : BaseActivity() {
 
     val detailFragment: DetailFragment by lazyFragment(DetailFragment.TAG, { DetailFragment.newInstance() })
 
-    val nfcAdapter: NfcAdapter by lazy { NfcAdapter.getDefaultAdapter(applicationContext) }
+    val handler = Handler()
+
+    val nfcAdapter: NfcAdapter by lazy {
+        NfcAdapter.getDefaultAdapter(applicationContext)
+            .apply {
+                enableReaderMode(this@MainActivity, { tag ->
+                    handler.post {
+                        Timber.d("recieve the card: ${tag.id}")
+                        try {
+                            val readTag = nfcReadUtil.readTag(tag)
+                            Timber.d(readTag.toString())
+                            Toast.makeText(this@MainActivity, "name : ${readTag.name}\nnumber: ${readTag.number}", Toast.LENGTH_LONG).show()
+                            soundPool.play(gateSuccess, 1F, 1F, 0, 0, 1F)
+                            vibrator.vibrate(250)
+                            switchFragment(detailFragment, DetailFragment.TAG)
+                            detailFragment.viewModel.studentCard = readTag
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            Toast.makeText(this@MainActivity, "読み取りに失敗しました。\n${e.message}", Toast.LENGTH_SHORT).show()
+                            soundPool.play(gateFailed, 1F, 1F, 0, 0, 1F)
+                        }
+                    }
+                },
+                    NfcAdapter.FLAG_READER_NFC_F
+                        or NfcAdapter.FLAG_READER_NO_PLATFORM_SOUNDS
+                    , null)
+            }
+    }
 
     val pendingIntent by lazy { PendingIntent.getActivity(this, 0, Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0) }
 
@@ -63,6 +92,10 @@ class MainActivity : BaseActivity() {
                 .apply { addDataType("text/plain") }
         )
     }
+
+    val soundPool: SoundPool by lazy { SoundPool(1, AudioManager.STREAM_MUSIC, 0) }
+    var gateSuccess = -1
+    var gateFailed = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,29 +153,19 @@ class MainActivity : BaseActivity() {
         super.onResume()
         Timber.d("start nfc scanning")
         nfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFilter, arrayOf(arrayOf(NfcF::class.java.name)))
+        gateSuccess = soundPool.load(this, R.raw.gate_success, 0)
+        gateFailed = soundPool.load(this, R.raw.gate_failed, 0)
     }
 
     override fun onPause() {
         super.onPause()
         Timber.d("stop nfc scanning")
         nfcAdapter.disableForegroundDispatch(this)
+        soundPool.release()
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        val tag: Tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG) ?: return
-        Timber.d("recieve the card: ${tag.id}")
-        try {
-            val readTag = nfcReadUtil.readTag(tag)
-            Timber.d(readTag.toString())
-            Toast.makeText(this, "name : ${readTag.name}\nnumber: ${readTag.number}", Toast.LENGTH_LONG).show()
-            vibrator.vibrate(250)
-            switchFragment(detailFragment, DetailFragment.TAG)
-            detailFragment.viewModel.studentCard = readTag
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(this, "読み取りに失敗しました。\n${e.message}", Toast.LENGTH_SHORT).show()
-        }
     }
 
     override fun onBackPressed() {
