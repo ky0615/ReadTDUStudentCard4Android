@@ -1,5 +1,7 @@
 package moe.linux.boilerplate.util.view
 
+import android.app.Activity
+import android.content.Intent
 import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
@@ -21,4 +23,6 @@ class Navigator @Inject constructor(val activity: AppCompatActivity) {
             }.build().launchUrl(activity, Uri.parse(url))
         } ?: Timber.e("URL parse error: $url")
     }
+
+    fun <T : Activity> startActivity(clz: Class<T>) = activity.startActivity(Intent(activity, clz))
 }

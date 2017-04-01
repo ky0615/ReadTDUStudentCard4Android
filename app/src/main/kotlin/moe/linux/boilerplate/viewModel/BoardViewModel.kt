@@ -1,6 +1,7 @@
 package moe.linux.boilerplate.viewModel
 
 import android.content.Context
+import android.content.Intent
 import android.databinding.BaseObservable
 import android.databinding.ObservableArrayList
 import android.view.View
@@ -17,6 +18,7 @@ import moe.linux.boilerplate.util.view.DataBindingViewHolder
 import moe.linux.boilerplate.util.view.Navigator
 import moe.linux.boilerplate.util.view.ObservableListRecyclerAdapter
 import moe.linux.boilerplate.util.view.ViewModel
+import moe.linux.boilerplate.view.activity.CardOptionActivity
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -60,6 +62,7 @@ class StudentCardViewModel(val navigator: Navigator, val studentCard: StudentCar
 
     fun onClick(view: View) {
         Timber.d("click")
+        navigator.startActivity(CardOptionActivity::class.java)
 //        Timber.d("click with: ${stock.title}")
 //        navigator.navigateToWebPage(stock.url)
     }
