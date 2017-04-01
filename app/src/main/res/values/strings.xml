@@ -14,5 +14,8 @@
 
     <string name="detail_name">Name</string>
     <string name="detail_number">Number</string>
+    <string name="detail_mail">Mail(任意)</string>
     <string name="detail_save">Save</string>
+    <string name="detail_remove">Remove</string>
+    <string name="detail_send_mail">Send Mail</string>
 </resources>

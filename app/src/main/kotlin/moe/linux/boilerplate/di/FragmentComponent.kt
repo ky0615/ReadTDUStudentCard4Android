@@ -2,16 +2,14 @@ package moe.linux.boilerplate.di
 
 import dagger.Subcomponent
 import moe.linux.boilerplate.di.scope.FragmentScope
-import moe.linux.boilerplate.view.fragment.FrontFragment
-import moe.linux.boilerplate.view.fragment.DetailFragment
-import moe.linux.boilerplate.view.fragment.MainFragment
-import moe.linux.boilerplate.view.fragment.QiitaListFragment
+import moe.linux.boilerplate.view.fragment.*
 
 @FragmentScope
 @Subcomponent(modules = arrayOf(
     FragmentModule::class
 ))
 interface FragmentComponent {
+    fun injectTo(fragment: CardMenuDialogFragment)
     fun injectTo(fragment: FrontFragment)
     fun injectTo(fragment: MainFragment)
     fun injectTo(fragment: QiitaListFragment)

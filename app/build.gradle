@@ -27,6 +27,7 @@ android {
         ]
 
         buildConfigField "String", "BASE_PACKAGE_ID", String.format("\"%s\"", packageName);
+        buildConfigField "String", "MAIL_PREFIX", String.format("\"%s\"", "@ms.dendai.ac.jp");
     }
 
     signingConfigs {

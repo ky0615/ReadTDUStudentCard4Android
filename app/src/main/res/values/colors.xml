@@ -8,4 +8,7 @@
     <color name="nav_background">@color/md_white</color>
     <color name="nav_active">@color/colorPrimary</color>
     <color name="nav_inactive">@color/md_grey400</color>
+
+    <!-- Dialog -->
+    <color name="windowBackground">#6CFFFFFF</color>
 </resources>

@@ -1,7 +1,6 @@
 package moe.linux.boilerplate.viewModel
 
 import android.content.Context
-import android.content.Intent
 import android.databinding.BaseObservable
 import android.databinding.ObservableArrayList
 import android.view.View
@@ -18,7 +17,7 @@ import moe.linux.boilerplate.util.view.DataBindingViewHolder
 import moe.linux.boilerplate.util.view.Navigator
 import moe.linux.boilerplate.util.view.ObservableListRecyclerAdapter
 import moe.linux.boilerplate.util.view.ViewModel
-import moe.linux.boilerplate.view.activity.CardOptionActivity
+import moe.linux.boilerplate.view.fragment.CardMenuDialogFragment
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -32,11 +31,13 @@ class BoardViewModel @Inject constructor(db: DatabaseReference, val navigator: N
 
     val userDbEventListener = object : ValueEventListener {
         override fun onDataChange(p0: DataSnapshot?) {
+            userList.clear()
             p0?.children?.forEach {
-                userList.add(it.getValue(StudentCard::class.java).convertToViewModel())
-                Timber.d("list: ${it.value}")
+                userList.add(it.getValue(StudentCard::class.java).run {
+                    Timber.d("set: $name")
+                    convertToViewModel()
+                })
             }
-            Timber.d("add message : ${p0?.value.toString()}")
         }
 
         override fun onCancelled(p0: DatabaseError?) {
@@ -45,6 +46,7 @@ class BoardViewModel @Inject constructor(db: DatabaseReference, val navigator: N
     }
 
     fun start() {
+        userList.clear()
         userDb.addValueEventListener(userDbEventListener)
     }
 
@@ -62,7 +64,7 @@ class StudentCardViewModel(val navigator: Navigator, val studentCard: StudentCar
 
     fun onClick(view: View) {
         Timber.d("click")
-        navigator.startActivity(CardOptionActivity::class.java)
+        CardMenuDialogFragment.getInstanse(studentCard).show(navigator.activity.supportFragmentManager, "")
 //        Timber.d("click with: ${stock.title}")
 //        navigator.navigateToWebPage(stock.url)
     }

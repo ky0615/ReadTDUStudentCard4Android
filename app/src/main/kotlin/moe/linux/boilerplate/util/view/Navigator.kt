@@ -13,7 +13,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @ActivityScope
-class Navigator @Inject constructor(val activity: AppCompatActivity) {
+open class Navigator @Inject constructor(val activity: AppCompatActivity) {
 
     fun navigateToWebPage(url: String) {
         url.takeIf { URLUtil.isNetworkUrl(url) }?.apply {
@@ -22,6 +22,14 @@ class Navigator @Inject constructor(val activity: AppCompatActivity) {
                 setToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimary))
             }.build().launchUrl(activity, Uri.parse(url))
         } ?: Timber.e("URL parse error: $url")
+    }
+
+    fun navigateSendEmailWithBCC(bcc: Array<String>) {
+        activity.startActivity(Intent().also { intent ->
+            intent.action = Intent.ACTION_SEND
+            intent.type = "message/rfc822"
+            intent.putExtra(Intent.EXTRA_BCC, bcc)
+        })
     }
 
     fun <T : Activity> startActivity(clz: Class<T>) = activity.startActivity(Intent(activity, clz))
