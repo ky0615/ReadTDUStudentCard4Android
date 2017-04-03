@@ -93,13 +93,16 @@ class MainActivity : BaseActivity() {
         )
     }
 
-    val soundPool: SoundPool by lazy { SoundPool(1, AudioManager.STREAM_MUSIC, 0) }
+    val soundPool by lazy { SoundPool(1, AudioManager.STREAM_MUSIC, 0) }
     var gateSuccess = -1
     var gateFailed = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityComponent.injectTo(this)
+
+        gateSuccess = soundPool.load(this, R.raw.gate_success, 1)
+        gateFailed = soundPool.load(this, R.raw.gate_failed, 1)
 
         initView()
         initFragment(savedInstanceState)
@@ -153,14 +156,16 @@ class MainActivity : BaseActivity() {
         super.onResume()
         Timber.d("start nfc scanning")
         nfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFilter, arrayOf(arrayOf(NfcF::class.java.name)))
-        gateSuccess = soundPool.load(this, R.raw.gate_success, 0)
-        gateFailed = soundPool.load(this, R.raw.gate_failed, 0)
     }
 
     override fun onPause() {
         super.onPause()
         Timber.d("stop nfc scanning")
         nfcAdapter.disableForegroundDispatch(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         soundPool.release()
     }
 
