@@ -1,5 +1,5 @@
-# AndroidKotlinBoilerplate
-Android Boilerplate written in Kotlin.
+# ReadTDUStudentCard4Android
+Read student card for Android.
 
 ## Libraries
 - Dagger2
@@ -17,14 +17,26 @@ Android Boilerplate written in Kotlin.
 - Android SDK
 - Android `7.1(API25)`
 - Android SDK Tools
-- Android SDK Build tools `25.0.1`
+- Android SDK Build tools `25.0.2`
 
 ## Usage
 
+### Configure
 ```
 $ cp signing.properties.sample signing.properties
+$ vim signing.properties
+
 $ cp app/fabric.properties.sample app/fabric.properties
+$ vim app/fabric.properties
 ```
+
+#### Firebase
+Download the google-services.json in Firebase Console.  
+Copy to app/google-services.json, and edit it.  
+When you use `applicationId` in `buildFlavors` , you can add in `client` 'array only for packageName.
+
+
+#### Fabric
 
 If you not use the Fabric, Also todo this.
 ```diff
