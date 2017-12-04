@@ -8,13 +8,13 @@ apply plugin: 'com.github.ben-manes.versions'
 def packageName = "moe.linux.readcard.tdu"
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 27
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId packageName
-        minSdkVersion 15
-        targetSdkVersion 25
+        minSdkVersion 21
+        targetSdkVersion 27
         multiDexEnabled true
         versionCode 1
         versionName "1.0"
@@ -66,8 +66,11 @@ android {
         }
     }
 
+    flavorDimensions "api", "mode"
+
     productFlavors {
         local {
+            dimension "mode"
             applicationId packageName + ".local"
             buildConfigField "String", "API_BASE", "\"https://hogehoge.com\""
 
@@ -77,12 +80,33 @@ android {
         }
 
         production {
+            dimension "mode"
             applicationId packageName
             buildConfigField "String", "API_BASE", "\"https://hogehoge.com\""
 
             manifestPlaceholders = [
                     facebookKey: 0
             ]
+        }
+
+        // Configurations in the "api" product flavors override those in "mode"
+        // flavors and the defaultConfig {} block. Gradle determines the priority
+        // between flavor dimensions based on the order in which they appear next
+        // to the flavorDimensions property above--the first dimension has a higher
+        // priority than the second, and so on.
+        minApi24 {
+            dimension "api"
+            minSdkVersion '24'
+        }
+
+        minApi23 {
+            dimension "api"
+            minSdkVersion '23'
+        }
+
+        minApi21 {
+            dimension "api"
+            minSdkVersion '21'
         }
     }
 
@@ -112,39 +136,39 @@ dependencies {
     compile "com.android.support:recyclerview-v7:${support_lib_version}"
     compile "com.android.support:customtabs:${support_lib_version}"
 
-    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support:multidex:1.0.2'
 
     // DataBinding
-    kapt 'com.android.databinding:compiler:2.3.0'
+    kapt 'com.android.databinding:compiler:3.0.1'
 
     // Firebase
     compile 'com.google.firebase:firebase-core:10.2.0'
     compile 'com.google.firebase:firebase-database:10.2.0'
 
     // Dagger
-    compile 'com.google.dagger:dagger:2.8'
-    kapt 'com.google.dagger:dagger-compiler:2.8'
+    compile 'com.google.dagger:dagger:2.9'
+    kapt 'com.google.dagger:dagger-compiler:2.9'
 
     // Retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
 
     // RxJava
     compile 'io.reactivex.rxjava2:rxjava:2.0.0'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.0'
 
     // okhttp
-    compile 'com.squareup.okhttp3:okhttp:3.4.2'
+    compile 'com.squareup.okhttp3:okhttp:3.7.0'
 
     // picasso
     compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
 
     // Paperparcel
-    compile 'nz.bradcampbell:paperparcel:2.0.0'
-    compile 'nz.bradcampbell:paperparcel-kotlin:2.0.0' // Optional
-    kapt 'nz.bradcampbell:paperparcel-compiler:2.0.0'
+    compile 'nz.bradcampbell:paperparcel:2.0.4'
+    compile 'nz.bradcampbell:paperparcel-kotlin:2.0.4' // Optional
+    kapt 'nz.bradcampbell:paperparcel-compiler:2.0.4'
 
     // Fabric
     compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
@@ -155,7 +179,7 @@ dependencies {
     }
 
     // Misc
-    compile 'com.jakewharton.timber:timber:4.3.1'
+    compile 'com.jakewharton.timber:timber:4.5.1'
 
     testCompile 'junit:junit:4.12'
     testCompile 'com.github.gfx.android.robolectricinstrumentation:robolectric-instrumentation:3.1.4'

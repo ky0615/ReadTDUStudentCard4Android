@@ -35,12 +35,12 @@ class FrontFragment : BaseFragment() {
         viewModel.start()
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentFrontBinding.inflate(inflater, container, false)
             .apply {
                 viewModel = this@FrontFragment.viewModel
                 list.layoutManager = LinearLayoutManager(context)
-                list.adapter = StudentCardListAdapter(context, viewModel.userList)
+                list.adapter = StudentCardListAdapter(context!!, viewModel!!.userList)
             }
         return binding.root
     }

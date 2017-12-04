@@ -39,10 +39,10 @@ class QiitaListFragment : BaseFragment() {
         fragmentComponent.injectTo(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentQiitaListBinding.inflate(inflater, container, false).apply {
             list.layoutManager = LinearLayoutManager(context)
-            list.adapter = QiitaListAdapter(context, qiitaListViewModel.list)
+            list.adapter = QiitaListAdapter(context!!, qiitaListViewModel.list)
         }
         return binding.root
     }

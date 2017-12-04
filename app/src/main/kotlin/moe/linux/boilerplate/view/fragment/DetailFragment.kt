@@ -33,7 +33,7 @@ class DetailFragment : BaseFragment() {
         fragmentComponent.injectTo(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentDetailBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         viewModel.firebaseCompletionListener = DatabaseReference.CompletionListener { databaseError, databaseReference ->

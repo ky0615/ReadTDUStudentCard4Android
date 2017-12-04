@@ -33,7 +33,7 @@ class CardMenuDialogFragment : DialogFragment() {
 
     fun getBaseActivity(): BaseActivity = activity as BaseActivity
 
-    val studentCard: StudentCard by lazy { arguments.getParcelable<StudentCard>(CARD) }
+    val studentCard: StudentCard by lazy { arguments!!.getParcelable<StudentCard>(CARD) }
 
     val inflater: LayoutInflater by lazy { LayoutInflater.from(context) }
 

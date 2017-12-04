@@ -12,10 +12,10 @@ import moe.linux.boilerplate.util.view.FragmentNavigator
 class FragmentModule(val fragment: Fragment) {
 
     @Provides
-    fun provideContext(): Context = fragment.context
+    fun provideContext(): Context = fragment.context!!
 
     @Provides
-    fun provideFragmentManager(): FragmentManager = fragment.fragmentManager
+    fun provideFragmentManager(): FragmentManager = fragment.fragmentManager!!
 
     @Provides
     fun provideFragmentNavigator(activity: AppCompatActivity) = FragmentNavigator(activity, fragment)
