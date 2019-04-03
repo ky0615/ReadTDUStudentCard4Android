@@ -30,18 +30,18 @@ class BoardViewModel @Inject constructor(db: DatabaseReference, val navigator: N
     lateinit var binding: FragmentFrontBinding
 
     val userDbEventListener = object : ValueEventListener {
-        override fun onDataChange(p0: DataSnapshot?) {
+        override fun onDataChange(p0: DataSnapshot) {
             userList.clear()
-            p0?.children?.forEach {
-                userList.add(it.getValue(StudentCard::class.java).run {
+            p0.children.forEach {
+                userList.add(it.getValue(StudentCard::class.java)!!.run {
                     Timber.d("set: $name")
                     convertToViewModel()
                 })
             }
         }
 
-        override fun onCancelled(p0: DatabaseError?) {
-            Timber.e("error: ${p0?.message}")
+        override fun onCancelled(p0: DatabaseError) {
+            Timber.e("error: ${p0.message}")
         }
     }
 

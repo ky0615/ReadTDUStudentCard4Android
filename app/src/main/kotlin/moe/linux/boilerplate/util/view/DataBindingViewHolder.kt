@@ -10,5 +10,5 @@ import android.view.ViewGroup
 class DataBindingViewHolder<out T : ViewDataBinding>(context: Context, resource: Int, root: ViewGroup)
     : RecyclerView.ViewHolder(LayoutInflater.from(context).inflate(resource, root, false)) {
 
-    val binding: T by lazy { DataBindingUtil.bind<T>(itemView) }
+    val binding: T by lazy { DataBindingUtil.bind<T>(itemView)!! }
 }
